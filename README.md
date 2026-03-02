@@ -14,21 +14,21 @@ Native macOS status bar timer app built with Swift and AppKit.
 ## Run
 
 ```bash
-cd "/Users/oliver.scotten/Documents/DevEnv/Timer App/timer-statusbar-swift"
+cd "/Users/oliver.scotten/Documents/DevEnv/Silent Timer"
 swift run
 ```
 
 ## Build
 
 ```bash
-cd "/Users/oliver.scotten/Documents/DevEnv/Timer App/timer-statusbar-swift"
+cd "/Users/oliver.scotten/Documents/DevEnv/Silent Timer"
 swift build
 ```
 
 ## Build `.app` Bundle
 
 ```bash
-cd "/Users/oliver.scotten/Documents/DevEnv/Timer App/timer-statusbar-swift"
+cd "/Users/oliver.scotten/Documents/DevEnv/Silent Timer"
 chmod +x scripts/build_app.sh
 ./scripts/build_app.sh
 ```
