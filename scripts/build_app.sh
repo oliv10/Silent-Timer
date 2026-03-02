@@ -9,6 +9,9 @@ EXECUTABLE_PATH="${ROOT_DIR}/.build/release/${EXECUTABLE_NAME}"
 ICON_SOURCE="${ROOT_DIR}/assets/AppIcon1024.png"
 ICON_DEST_NAME="AppIcon.icns"
 BUNDLE_IDENTIFIER="com.silenttimer.statusbar"
+DEFAULT_APP_VERSION="$("${ROOT_DIR}/scripts/get_version.sh")"
+APP_VERSION="${APP_VERSION:-${DEFAULT_APP_VERSION}}"
+BUILD_NUMBER="${BUILD_NUMBER:-1}"
 
 cd "${ROOT_DIR}"
 
@@ -50,9 +53,9 @@ cat > "${APP_BUNDLE}/Contents/Info.plist" <<PLIST
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>${APP_VERSION}</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>${BUILD_NUMBER}</string>
     <key>LSMinimumSystemVersion</key>
     <string>13.0</string>
     <key>LSUIElement</key>

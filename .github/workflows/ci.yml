@@ -21,6 +21,9 @@ jobs:
       - name: Show Swift Version
         run: swift --version
 
+      - name: Validate repo version
+        run: ./scripts/get_version.sh
+
       - name: Build (debug)
         run: swift build
 
