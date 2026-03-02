@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["**"]
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  swift-checks:
+    name: Swift Build and Test
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Swift Version
+        run: swift --version
+
+      - name: Build (debug)
+        run: swift build
+
+      - name: Build (release)
+        run: swift build -c release
+
+      - name: Detect tests
+        id: detect_tests
+        run: |
+          if [ -d Tests ] && find Tests -type f -name "*.swift" | grep -q .; then
+            echo "has_tests=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_tests=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Test
+        if: steps.detect_tests.outputs.has_tests == 'true'
+        run: swift test
+
+      - name: Skip test notice
+        if: steps.detect_tests.outputs.has_tests != 'true'
+        run: echo "No Tests target found; skipping swift test."

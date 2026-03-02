@@ -38,3 +38,14 @@ This creates:
 
 - Source icon asset: `assets/AppIcon1024.png`
 - The bundle script copies this into the app as `Contents/Resources/AppIcon.icns`
+
+## Automated Checks
+
+The repo includes GitHub Actions workflows that run automatically:
+
+- `CI` (`.github/workflows/ci.yml`)
+  - Runs on pushes to `main` and on pull requests
+  - Executes `swift build`, `swift build -c release`, and `swift test` on `macos-latest`
+- `CodeQL` (`.github/workflows/codeql.yml`)
+  - Runs on pushes to `main`, pull requests to `main`, and weekly
+  - Performs Swift code scanning and uploads results to GitHub Code Scanning
