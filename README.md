@@ -49,3 +49,27 @@ The repo includes GitHub Actions workflows that run automatically:
 - `CodeQL` (`.github/workflows/codeql.yml`)
   - Runs on pushes to `main`, pull requests to `main`, and weekly
   - Performs Swift code scanning and uploads results to GitHub Code Scanning
+
+## GitHub Releases
+
+This repo includes a release workflow at `.github/workflows/release.yml`.
+
+- Source of truth for version: `VERSION`
+- Trigger: push a tag that matches `VERSION` (example: `VERSION=1.0.0` => tag `v1.0.0`)
+- Output assets:
+  - `Silent-Timer-<version>.zip`
+  - `Silent-Timer-<version>.sha256`
+
+Release steps:
+
+```bash
+cat VERSION
+git tag "v$(cat VERSION)"
+git push origin "v$(cat VERSION)"
+```
+
+Notes:
+
+- The workflow fails if the pushed tag does not match `VERSION`.
+- `CFBundleShortVersionString` is always read from `VERSION`.
+- `CFBundleVersion` is set from the GitHub Actions run number.
