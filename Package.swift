@@ -13,6 +13,11 @@ let package = Package(
         .executableTarget(
             name: "SilentStatusTimer",
             path: "Sources"
+        ),
+        .testTarget(
+            name: "SilentStatusTimerTests",
+            dependencies: ["SilentStatusTimer"],
+            path: "Tests/SilentStatusTimerTests"
         )
     ]
 )

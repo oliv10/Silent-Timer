@@ -439,17 +439,10 @@ final class StatusTimerApp: NSObject, NSApplicationDelegate {
         }
 
         let remaining = max(0, Int(endDate.timeIntervalSinceNow.rounded(.down)))
-        let label = format(seconds: remaining)
+        let label = TimerFormatting.format(seconds: remaining)
         button.title = " \(label)"
         statusMenuItem.title = "Running: \(label) remaining"
         stopMenuItem.isEnabled = true
-    }
-
-    private func format(seconds: Int) -> String {
-        let hours = seconds / 3600
-        let minutes = (seconds % 3600) / 60
-        let secs = seconds % 60
-        return String(format: "%02d:%02d:%02d", hours, minutes, secs)
     }
 
     private func showFinishedAlert() {
