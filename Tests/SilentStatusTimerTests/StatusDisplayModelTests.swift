@@ -31,7 +31,7 @@ final class StatusDisplayModelTests: XCTestCase {
             countdownLabel: "00:05:00"
         )
 
-        XCTAssertEqual(model.iconSymbolName, "timer.circle.fill")
+        XCTAssertEqual(model.iconSymbolName, "timer.circle")
         XCTAssertEqual(model.menuBarTitle, " 00:05:00")
     }
 
@@ -42,7 +42,7 @@ final class StatusDisplayModelTests: XCTestCase {
             countdownLabel: "00:05:00"
         )
 
-        XCTAssertEqual(model.iconSymbolName, "timer.circle.fill")
+        XCTAssertEqual(model.iconSymbolName, "timer.circle")
         XCTAssertEqual(model.menuBarTitle, "")
     }
 }
