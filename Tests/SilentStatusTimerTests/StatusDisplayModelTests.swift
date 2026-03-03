@@ -28,18 +28,18 @@ final class StatusDisplayModelTests: XCTestCase {
         let model = StatusDisplayModel.make(
             isRunning: true,
             hideCountdownInMenuBar: false,
-            countdownLabel: "00:05:00"
+            countdownLabel: "5:00"
         )
 
         XCTAssertEqual(model.iconSymbolName, "timer")
-        XCTAssertEqual(model.menuBarTitle, " 00:05:00")
+        XCTAssertEqual(model.menuBarTitle, " 5:00")
     }
 
     func testRunningAndHideOnShowsRunningIconWithoutTitle() {
         let model = StatusDisplayModel.make(
             isRunning: true,
             hideCountdownInMenuBar: true,
-            countdownLabel: "00:05:00"
+            countdownLabel: "5:00"
         )
 
         XCTAssertEqual(model.iconSymbolName, "timer")
