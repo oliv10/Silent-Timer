@@ -6,6 +6,11 @@ enum TimerFormatting {
         let hours = clampedSeconds / 3600
         let minutes = (clampedSeconds % 3600) / 60
         let secs = clampedSeconds % 60
-        return String(format: "%02d:%02d:%02d", hours, minutes, secs)
+
+        if hours > 0 {
+            return String(format: "%d:%02d:%02d", hours, minutes, secs)
+        }
+
+        return String(format: "%d:%02d", minutes, secs)
     }
 }

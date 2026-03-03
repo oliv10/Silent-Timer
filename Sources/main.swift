@@ -313,27 +313,32 @@ final class CustomTimerPanelController: NSObject, NSTextFieldDelegate {
 final class StatusTimerApp: NSObject, NSApplicationDelegate {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let menu = NSMenu()
+    private let hideCountdownDefaultsKey = "hideCountdownInMenuBar"
 
     private var timer: Timer?
     private var endDate: Date?
+    private var hideCountdownInMenuBar = false
 
     private let statusMenuItem = NSMenuItem(title: "No timer running", action: nil, keyEquivalent: "")
     private let stopMenuItem = NSMenuItem(title: "Stop Timer", action: #selector(stopTimerAction), keyEquivalent: "")
+    private let hideCountdownMenuItem = NSMenuItem(
+        title: "Hide Countdown In Menu Bar",
+        action: #selector(toggleHideCountdownAction(_:)),
+        keyEquivalent: ""
+    )
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        hideCountdownInMenuBar = UserDefaults.standard.bool(forKey: hideCountdownDefaultsKey)
         configureStatusItem()
         configureMenu()
         updateUI()
     }
 
     private func configureStatusItem() {
-        guard let button = statusItem.button else {
+        guard statusItem.button != nil else {
             return
         }
-        let icon = NSImage(systemSymbolName: "timer", accessibilityDescription: "Timer")
-        icon?.isTemplate = true
-        button.image = icon
-        button.title = ""
+        updateStatusItemAppearance(isRunning: false, countdownLabel: nil)
         statusItem.menu = menu
     }
 
@@ -353,6 +358,15 @@ final class StatusTimerApp: NSObject, NSApplicationDelegate {
 
         stopMenuItem.target = self
         menu.addItem(stopMenuItem)
+        menu.addItem(.separator())
+
+        let settingsRootItem = NSMenuItem(title: "Settings", action: nil, keyEquivalent: "")
+        let settingsMenu = NSMenu(title: "Settings")
+        hideCountdownMenuItem.target = self
+        hideCountdownMenuItem.state = hideCountdownInMenuBar ? .on : .off
+        settingsMenu.addItem(hideCountdownMenuItem)
+        settingsRootItem.submenu = settingsMenu
+        menu.addItem(settingsRootItem)
         menu.addItem(.separator())
 
         let quitItem = NSMenuItem(title: "Quit", action: #selector(quitAction), keyEquivalent: "q")
@@ -386,6 +400,13 @@ final class StatusTimerApp: NSObject, NSApplicationDelegate {
         timer?.invalidate()
         timer = nil
         endDate = nil
+        updateUI()
+    }
+
+    @objc private func toggleHideCountdownAction(_ sender: NSMenuItem) {
+        hideCountdownInMenuBar.toggle()
+        UserDefaults.standard.set(hideCountdownInMenuBar, forKey: hideCountdownDefaultsKey)
+        hideCountdownMenuItem.state = hideCountdownInMenuBar ? .on : .off
         updateUI()
     }
 
@@ -427,22 +448,34 @@ final class StatusTimerApp: NSObject, NSApplicationDelegate {
     }
 
     private func updateUI() {
-        guard let button = statusItem.button else {
-            return
-        }
-
         guard let endDate else {
-            button.title = ""
             statusMenuItem.title = "No timer running"
             stopMenuItem.isEnabled = false
+            updateStatusItemAppearance(isRunning: false, countdownLabel: nil)
             return
         }
 
         let remaining = max(0, Int(endDate.timeIntervalSinceNow.rounded(.down)))
         let label = TimerFormatting.format(seconds: remaining)
-        button.title = " \(label)"
         statusMenuItem.title = "Running: \(label) remaining"
         stopMenuItem.isEnabled = true
+        updateStatusItemAppearance(isRunning: true, countdownLabel: label)
+    }
+
+    private func updateStatusItemAppearance(isRunning: Bool, countdownLabel: String?) {
+        guard let button = statusItem.button else {
+            return
+        }
+
+        let display = StatusDisplayModel.make(
+            isRunning: isRunning,
+            hideCountdownInMenuBar: hideCountdownInMenuBar,
+            countdownLabel: countdownLabel
+        )
+        let icon = NSImage(systemSymbolName: display.iconSymbolName, accessibilityDescription: "Timer")
+        icon?.isTemplate = true
+        button.image = icon
+        button.title = display.menuBarTitle
     }
 
     private func showFinishedAlert() {
