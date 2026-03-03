@@ -5,7 +5,7 @@ struct StatusDisplayModel {
     let menuBarTitle: String
 
     static func make(isRunning: Bool, hideCountdownInMenuBar: Bool, countdownLabel: String?) -> StatusDisplayModel {
-        let iconSymbolName = isRunning ? "clock.fill" : "timer"
+        let iconSymbolName = isRunning ? "stopwatch.fill" : "timer"
 
         guard isRunning, hideCountdownInMenuBar == false, let countdownLabel else {
             return StatusDisplayModel(iconSymbolName: iconSymbolName, menuBarTitle: "")
